@@ -1,5 +1,9 @@
 FILENAME = "srcs/docker-compose.yml"
 
+RM = rm -rf
+
+VOLUME_DIRS = /home/rvinnie/data/mariadb /home/rvinnie/data/wordpress 
+
 all:	up
 
 build:
@@ -28,8 +32,9 @@ re:	stop up
 clean:
 	docker-compose -f $(FILENAME) down -v --rmi -a
 
-fclean:
-
+fclean:	clean
+	$(RM) $(VOLUME_DIRS)
+	mkdir $(VOLUME_DIRS)
 
 
 

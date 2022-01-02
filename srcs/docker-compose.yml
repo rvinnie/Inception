@@ -1,0 +1,53 @@
+version: "3.2"
+services:
+  nginx:
+    container_name: nginx
+    restart: always
+    build: ./requirements/nginx
+    volumes:
+      - wordpress:/path/to/wordpress
+    networks:
+      - nw
+    depends_on:
+      - wordpress
+
+  mariadb:
+    container_name: mariadb
+    restart: always
+    build: ./requirements/mariadb
+    volumes:
+      - db:/path/to/sql
+    networks:
+      - nw
+
+  wordpress:
+    container_name: wordpress
+    restart: always
+    build: ./requirements/wordpress
+    volumes:
+      - wordpress:/path/to/wordpress
+    networks:
+      - nw
+    depends_on:
+      - mariadb
+
+volumes:
+  db:
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/rvinnie/data/mariadb
+      o: bind
+
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/rvinnie/data/wordpress
+      o: bind
+
+networks:
+  nw:
+    driver: bridge
