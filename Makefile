@@ -2,7 +2,7 @@ FILENAME = "srcs/docker-compose.yml"
 
 RM = rm -rf
 
-VOLUME_DIRS = /home/rvinnie/data/mariadb /home/rvinnie/data/wordpress 
+VOLUME_DIRS = /home/${USER}/data/mariadb /home/${USER}/data/wordpress 
 
 all:	up
 
@@ -10,6 +10,7 @@ build:
 	docker-compose -f $(FILENAME) build
 
 up:
+	mkdir -p ${VOLUME_DIRS}
 	docker-compose -f $(FILENAME) up
 
 start:

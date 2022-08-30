@@ -1,22 +1,26 @@
-version: "3.2"
+version: "3.9"
 services:
   nginx:
     container_name: nginx
     restart: always
+    hostname: localhost
     build: ./requirements/nginx
     volumes:
-      - wordpress:/path/to/wordpress
+      - wordpress:/var/www/html/wordpress
     networks:
       - nw
     depends_on:
       - wordpress
+    ports:
+      - "443:443" # https
 
   mariadb:
     container_name: mariadb
     restart: always
     build: ./requirements/mariadb
+    env_file: .env
     volumes:
-      - db:/path/to/sql
+      - db:/var/lib/mysql
     networks:
       - nw
 
@@ -24,8 +28,9 @@ services:
     container_name: wordpress
     restart: always
     build: ./requirements/wordpress
+    env_file: .env
     volumes:
-      - wordpress:/path/to/wordpress
+      - wordpress:/var/www/html/wordpress
     networks:
       - nw
     depends_on:
@@ -37,7 +42,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/rvinnie/data/mariadb
+      device: /home/${USER}/data/mariadb
       o: bind
 
   wordpress:
@@ -45,7 +50,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/rvinnie/data/wordpress
+      device: /home/${USER}/data/wordpress
       o: bind
 
 networks:
